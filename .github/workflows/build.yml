@@ -26,13 +26,28 @@ jobs:
       - name: Test
         run: dotnet test --configuration Release --no-build --logger "console;verbosity=normal"
 
-      - name: Publish (framework-dependent, win-x64)
+      - name: Publish (self-contained single file, win-x64)
         run: >
           dotnet publish src/PomoTray.App/PomoTray.App.csproj
           --configuration Release
           --runtime win-x64
-          --self-contained false
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -p:DebugType=embedded
           --output publish
+
+      # Guards the promise that the download runs with no .NET install. If single-file
+      # ever silently stops applying, the exe is joined by a runtime folder and this fails.
+      - name: Verify single-file output
+        shell: pwsh
+        run: |
+          $files = @(Get-ChildItem publish -File)
+          if ($files.Count -ne 1) { throw "Expected 1 file, found $($files.Count): $($files.Name -join ', ')" }
+          if ($files[0].Extension -ne '.exe') { throw "Expected an .exe, found $($files[0].Name)" }
+          $size = [math]::Round($files[0].Length / 1MB, 1)
+          Write-Host "$($files[0].Name) - $size MB, self-contained, symbols embedded"
 
       - name: Upload app
         uses: actions/upload-artifact@v4

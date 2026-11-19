@@ -63,6 +63,14 @@ DupFind uses MVVM because it has a data grid, selection state and commands. Pomo
 and five menu items: an MVVM layer here would be ceremony around glue code. The part with actual
 decisions — the phase machine — is isolated and tested instead. Same judgement, different size.
 
+## Download and run
+
+Every push to `main` publishes a single self-contained `PomoTray.exe` for `win-x64`. The .NET
+runtime is bundled, so nothing needs to be installed first. Download it from the artifacts of
+the latest green run: **Actions → the newest `build` run → Artifacts → `PomoTray-win-x64`**.
+
+The executable is unsigned, so SmartScreen warns on first launch: *More info → Run anyway*.
+
 ## Build and run
 
 Requires the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
@@ -79,7 +87,8 @@ to change the durations.
 dotnet test
 ```
 
-CI builds, tests and publishes a `win-x64` artifact on every push.
+CI builds, tests and publishes a self-contained single-file `win-x64` build on every push, and
+fails if the output is ever more than one file.
 
 ## Tests
 
