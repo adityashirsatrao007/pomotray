@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PomoTray</AssemblyName>
+    <RootNamespace>PomoTray.App</RootNamespace>
+    <ApplicationIcon>assets\app.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Product>PomoTray</Product>
+    <Description>Pomodoro timer in the Windows system tray with a global hotkey.</Description>
+  </PropertyGroup>
+
+  <!-- Lets contributors on Linux/macOS restore and compile the solution. No effect on Windows. -->
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="assets\app.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PomoTray.Core\PomoTray.Core.csproj" />
+  </ItemGroup>
+
+</Project>
