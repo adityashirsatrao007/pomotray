@@ -43,6 +43,11 @@ public sealed class SettingsStore
     public void Save(AppSettings settings)
     {
         Directory.CreateDirectory(Folder);
-        File.WriteAllText(FilePath, JsonSerializer.Serialize(settings, Options));
+
+        // Write beside the real file and swap it in, so a crash mid-write cannot leave a
+        // truncated settings.json that silently resets the user's durations.
+        var temporary = FilePath + ".tmp";
+        File.WriteAllText(temporary, JsonSerializer.Serialize(settings, Options));
+        File.Move(temporary, FilePath, overwrite: true);
     }
 }

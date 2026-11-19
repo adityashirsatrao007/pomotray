@@ -30,7 +30,7 @@ to know, so each one is called out here:
 | Global hotkey | `RegisterHotKey` via P/Invoke on a **message-only window** (`HwndSource`, `HWND_MESSAGE`) | `RegisterHotKey` needs an HWND even with no visible window. `MOD_NOREPEAT` prevents key-repeat floods |
 | Single instance | Named `Mutex`, plus a named `EventWaitHandle` to signal the running copy | A mutex alone can only refuse to start; the event lets the second launch hand off to the first |
 | Start with Windows | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` | Per-user, so no elevation prompt and trivial to remove |
-| Settings | `System.Text.Json` in `%AppData%` | A corrupt or hand-edited file falls back to defaults instead of blocking startup |
+| Settings | `System.Text.Json` in `%AppData%`, written to a temp file and swapped in | A corrupt or hand-edited file falls back to defaults instead of blocking startup, and a crash mid-write cannot truncate it |
 | Crash evidence | `DispatcherUnhandledException`, `AppDomain.UnhandledException`, `TaskScheduler.UnobservedTaskException` → `crash.log` | A tray app that dies silently is unsupportable |
 
 ## Layout
